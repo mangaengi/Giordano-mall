@@ -1,0 +1,78 @@
+use가 붙은 것을 훅 이라 말함
+- Link 컴포넌트
+1> 특정 요소를 클릭하면 URL 경로가 바뀌면서 해당 경로로 이동하는 컴포넌트
+2> 클릭만 하면 이동하므로 특정 연산이 필요없음 => a 태그
+
+a태그 - 클릭할 때마다 페이지가 새로 불려짐
+link 컴포넌트 = 랜더링할 부분만 렌더링 되고 나머지는 유지
+            - > SPA 방식에서 사용
+a 태그 - 외부 프로젝트와 연결할 때
+<Link /> - 프로젝트에서 페이지 전환 시 
+
+- useNavigate = Hook
+-> 페이지 이동을 할 수 있게 해주는 함수를 변환
+-> 반환되는 함수를 변수에 저장해놓고 변수의 인자로 설정한 패스값을 넘겨주면 해당 경로로 이동됨
+-> 조건이 필요한 요소에서 
+Navigate 함수를 호출해서 이동 경로
+
+
+없다가 생기는거 사용자가 ui 건드는거 = useState
+ 
+바뀐 값을 화면에 뿌리는 것 전체적인 페이지가 로딩되는거 = useEffect => 콜백함수랑 같이 사용
+
+
+
+
+
+
+
+/== 쇼핑몰 작업 순서==/
+//1. 전체상품 페이지/로그인/상품페이지/uesr페이지
+    - src 폴더에 페이지 폴더 생성해서 작업할 페이지생성
+    - App.js에서 Routes로 각 페이지 연결
+
+//1-1. 네비게이션바 - 컴포넌트
+    - App.js에서 import해서 연결함
+    1-2. 네비게이션바에서 
+        1> 로그인영역
+        2> 로고영역 -> Link to로 인덱스로 가도록 연결
+        3> 네브게이션 영역 -> 부트스트랩에서 Navber로 연결해볼 것을 권장.
+    ---> localhost:3000을 기준으로 각각의 페이지가 나오는지 연결 테스트
+    ---> localhost:3000/login
+    ===> localhost:3000뒤에 붙는 경로는 App.js에서 Route 속성의 path에 선언된 경로
+
+//2. 전체상품페이지에서는 기본 상품이 진열됨.
+  --> (1) npm install -g json-server 
+  --> (2) 새 터미널 열어서 json-server --watch db.json --port 5000 - 폰트 번호는 3000번만 아니면 됨.
+  --> (3) 서버 연결이 되면 리소스 정보를 ctrl 누르고 클릭해서 deta정보 먼저 확인 - Resources http://localhost:5000/products
+    2-1 전제상품 페이지에서 잔열된 각 상품은 컴포넌츠로 ProductCard.js로 생성
+    --> 전체 상품 페이지에서불러온 db.json 파일을 필드값을 카드 페이지로 상속되게 함. ->Distructuring(객체분할)
+    --> 전체상품 ㅔ이지에 생성한 ProductCard 엘리먼트를 뿌려줌
+
+//3. 로그인 버튼을 클릭하면 로그인 페이지 나옴
+--> 전체상품 페이지에서 상품카드를 클릭하면 
+    ->> 로그인 상태가 true -> 상세페이지가 보이고
+    ->> 로그인 상태가 false -> login 페이지로
+
+3-1. 상품을 클릭했을 때 로그인 상태면 -> 상세페이지가 보이고  상태가 아니면 ->로그인 페이지가 보이도록 함.
+ - App.js페이지에서 기본 로그인 상태를 false로 설정 --> useState(false)
+ - PrivateRoute.js 페이지 생성
+   -> 로그인 상태가 true -> 디테일로 가고
+   -> 로그인 상태가 false -> 로그인으로 가는 redirect 설정
+
+4. 상품 상세 페이지
+-> useParam -> id를 받아서 해당 id에 해당하는 정보를 출력
+->  const { id } = useParams();
+    const [product, setProduct] = useState(null);
+    const getProductsDetail = async() => {
+        let url = `http://localhost:5000/products/${id}`
+        let response = await fetch(url);
+        let data = await response.json();
+        //console.log(data)
+        setProduct(data)
+    }
+
+    useEffect(() => {
+      getProductsDetail()
+    }, [])
+-> 각 속성들은 Product. 키값으로 선언해서 출력 
