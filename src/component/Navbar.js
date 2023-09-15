@@ -69,7 +69,7 @@ const Navbar = ({authenticate, setAuthenticate}) => {
             ) : (
               <div onClick={()=>navigate('/login')}>
                 <FontAwesomeIcon icon={faUser} />
-                <span style={{cursor: 'pointer'}}>로그아웃</span>
+                <span style={{cursor: 'pointer'}}>로그인</span>
               </div>
             )
           }
